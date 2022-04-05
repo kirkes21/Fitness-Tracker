@@ -1,6 +1,7 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
 // const { } = require('./');
 const client = require('./client');
+const { createUser, getUserById } = require('./index.js')
 
 async function dropTables() {
   console.log('Dropping All Tables...');
@@ -40,19 +41,20 @@ async function createTables() {
         );
         CREATE TABLE routines (
           id SERIAL PRIMARY KEY,
-          "creatorId" INTEGER FOREIGN KEY,
+          "creatorId" INTEGER REFERENCES users(id),
           "isPublic" BOOLEAN DEFAULT false,
           name varchar(255) UNIQUE NOT NULL,
           goal TEXT NOT NULL
         );
         CREATE TABLE routine_activities (
           id SERIAL PRIMARY KEY,
-          "routineId" INTEGER FOREIGN KEY,
-          "activityId" INTEGER FOREIGN KEY,
+          "routineId" INTEGER REFERENCES routines(id),
+          "activityId" INTEGER REFERENCES activities(id),
           duration INTEGER,
           count INTEGER
         );
     `)
+    console.log('Tables built!')
   } catch (error) {
     console.error('ERROR creating tables!')
     throw error
@@ -203,7 +205,7 @@ async function rebuildDB() {
     client.connect();
     await dropTables();
     await createTables();
-    // await createInitialUsers();
+    await createInitialUsers();
     // await createInitialActivities();
     // await createInitialRoutines();
     // await createInitialRoutineActivities();
