@@ -20,11 +20,12 @@ const createUser = async ({ username, password }) => {
 
 const getUser = async ({ username, password }) => {
     try {
-        const { rows } = await client.query(`
+        const { rows: [user] } = await client.query(`
             SELECT id, username, password
             FROM users;
         `)
-        return rows
+        delete user.password
+        return user
     } catch (error) {
         throw error
     }
@@ -43,6 +44,21 @@ const getUserById = async (id) => {
         throw error
     }
 }
+
+const getUserByUsername = async (username) => {
+    try {
+        const { rows: [user] } = await client.query(`
+            SELECT * FROM users
+            WHERE username=${username};
+        `)
+        delete user.password
+
+        return user
+    } catch (error) {
+        throw error
+    }
+}
+
 
 module.exports = {
     createUser,
