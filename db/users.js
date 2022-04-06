@@ -47,10 +47,11 @@ const getUserById = async (id) => {
 
 const getUserByUsername = async (username) => {
     try {
-        const { rows: [user] } = await client.query(`
+
+        const user = await client.query(`
             SELECT * FROM users
-            WHERE username=${username};
-        `)
+            WHERE username=$1;
+        `, [username])
         delete user.password
 
         return user
@@ -62,5 +63,6 @@ const getUserByUsername = async (username) => {
 
 module.exports = {
     createUser,
-    getUserById
+    getUserById,
+    getUserByUsername
 }
