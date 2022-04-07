@@ -45,8 +45,8 @@ const getAllPublicRoutines = async () => {
         const {rows} = await client.query(`
             SELECT routines.*, users.username as "creatorName"
             FROM routines
-            WHERE "isPublic"
             LEFT JOIN users ON "creatorId"=users.id
+            WHERE "isPublic"
         `)
         return attachActivitiesToRoutines(rows)
     } catch (error) {
@@ -54,9 +54,15 @@ const getAllPublicRoutines = async () => {
     }
 }
 
-const getAllRoutinesByUser = async () => {
+const getAllRoutinesByUser = async ({username}) => {
     try {
-        
+        const {rows} = await client.query(`
+            SELECT routines.*, users.username as "creatorName"
+            FROM routines
+            LEFT JOIN users ON "creatorId"=users.id
+            WHERE users.username=$1
+        `, [username])
+        return attachActivitiesToRoutines(rows)
     } catch (error) {
         
     }
@@ -117,6 +123,7 @@ module.exports = {
     createRoutine,
     getAllRoutines,
     getRoutinesWithoutActivities,
-    getAllPublicRoutines
+    getAllPublicRoutines,
+    getAllRoutinesByUser
 
 };
