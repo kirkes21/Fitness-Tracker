@@ -40,7 +40,20 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
         WHERE id=${id}
         RETURNING *;
         `, Object.values(fields))
-        console.log(activity)
+        return activity
+    } catch (error) {
+        throw error
+    }
+}
+
+const destroyRoutineActivity = async (id) => {
+    try {
+        console.log(id)
+        const {rows: [activity]} = await client.query(`
+        DELETE FROM routine_activities
+        WHERE id=$1
+        RETURNING *
+        `, [id])
         return activity
     } catch (error) {
         throw error
@@ -50,5 +63,6 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
 module.exports = {
     addActivityToRoutine,
     getRoutineActivitiesByRoutine,
-    updateRoutineActivity
+    updateRoutineActivity,
+    destroyRoutineActivity
 }
