@@ -114,11 +114,24 @@ const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
     }
 }
 
-const updateRoutine = async () => {
+const updateRoutine = async ({ id, ...fields }) => {
     try {
+        const selectedRoutine = getRoutineById(id)
 
+        const setString = Object.keys(fields)
+            .map((key, index) => `"${key}" =$${index + 1}`)
+            .join(", ");
+
+        const { rows: [routine] } = await client.query(`
+        UPDATE routines
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *;
+        `, Object.values(fields))
+
+        return routine
     } catch (error) {
-
+        throw error
     }
 }
 
@@ -126,7 +139,7 @@ const destroyRoutine = async () => {
     try {
 
     } catch (error) {
-
+        throw error
     }
 }
 
@@ -143,5 +156,7 @@ module.exports = {
     getAllRoutinesByUser,
     getPublicRoutinesByUser,
     getPublicRoutinesByActivity,
-    getRoutineById
+    getRoutineById,
+    updateRoutine,
+    destroyRoutine
 };
