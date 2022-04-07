@@ -116,8 +116,6 @@ const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
 
 const updateRoutine = async ({ id, ...fields }) => {
     try {
-        const selectedRoutine = getRoutineById(id)
-
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}" =$${index + 1}`)
             .join(", ");
@@ -135,8 +133,16 @@ const updateRoutine = async ({ id, ...fields }) => {
     }
 }
 
-const destroyRoutine = async () => {
+const destroyRoutine = async (id) => {
     try {
+        await client.query(`
+        DELETE FROM routine_activities
+        WHERE "routineId"=$1
+        `, [id])
+        await client.query(`
+        DELETE FROM routines
+        WHERE routines.id=$1
+        `, [id])
 
     } catch (error) {
         throw error
