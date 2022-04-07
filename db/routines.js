@@ -107,7 +107,6 @@ const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
        ON CONFLICT (name) DO NOTHING
        RETURNING *
        `, [creatorId, isPublic, name, goal])
-        console.log([routine])
         return routine
     } catch (error) {
         throw error
