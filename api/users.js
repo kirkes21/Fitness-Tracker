@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 
 usersRouter.use((req, res, next) => {
     console.log("A request is being made to /users");
+
+    next()
 });
 
 usersRouter.get("/:userId", requireUser, async (req, res, next) => {
@@ -57,6 +59,7 @@ usersRouter.post('/register', async (req, res, next) => {
             username,
             password
         });
+        console.log('user:', user)
 
         const token = jwt.sign({
             id: user.id,
@@ -64,10 +67,12 @@ usersRouter.post('/register', async (req, res, next) => {
         }, process.env.JWT_SECRET, {
             expiresIn: '1w'
         });
+        console.log('token:', token)
 
         res.send({
             message: "thank you for signing up",
-            token
+            token,
+            user
         });
     } catch ({ name, message }) {
         next({ name, message })
