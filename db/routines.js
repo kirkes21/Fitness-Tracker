@@ -8,7 +8,9 @@ const getRoutineById = async (id) => {
             FROM routines
             WHERE id=$1
         `, [id])
-        return rows
+
+        const routine = rows[0]
+        return routine
     } catch (error) {
 
     }
@@ -102,12 +104,13 @@ const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
         const { rows: [routine] } = await client.query(`
        INSERT INTO routines("creatorId", "isPublic", name, goal)
        VALUES ($1, $2, $3, $4)
-       ON CONFLICT DO NOTHING
+       ON CONFLICT (name) DO NOTHING
        RETURNING *
        `, [creatorId, isPublic, name, goal])
+        console.log([routine])
         return routine
     } catch (error) {
-
+        throw error
     }
 }
 
@@ -139,5 +142,6 @@ module.exports = {
     getAllPublicRoutines,
     getAllRoutinesByUser,
     getPublicRoutinesByUser,
-    getPublicRoutinesByActivity
+    getPublicRoutinesByActivity,
+    getRoutineById
 };
