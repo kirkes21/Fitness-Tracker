@@ -32,8 +32,8 @@ const getUser = async ({ username, password }) => {
         `, [username]);
 
     if (password === user.password) {
-        delete user.password;
-        return user;
+      delete user.password;
+      return user;
     }
   } catch (error) {
     throw error;
@@ -58,9 +58,7 @@ const getUserById = async (id) => {
 
 const getUserByUsername = async (username) => {
   try {
-    const {
-      rows: [user],
-    } = await client.query(`
+    const user = await client.query(`
             SELECT * FROM users
             WHERE username=$1;
         `, [username]);
@@ -75,5 +73,6 @@ const getUserByUsername = async (username) => {
 module.exports = {
   createUser,
   getUserById,
-  getUser
+  getUser,
+  getUserByUsername
 };

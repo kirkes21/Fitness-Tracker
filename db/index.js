@@ -3,7 +3,9 @@
 const {
   createUser,
   getUserById,
-  getUser } = require("./users");
+  getUser,
+  getUserByUsername
+} = require("./users");
 
 const {
   createActivity,
@@ -53,5 +55,6 @@ module.exports = {
   destroyRoutine,
   getRoutineActivitiesByRoutine,
   updateRoutineActivity,
-  destroyRoutineActivity
+  destroyRoutineActivity,
+  getUserByUsername
 }
