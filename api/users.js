@@ -12,28 +12,16 @@ usersRouter.use((req, res, next) => {
     next()
 });
 
-usersRouter.get("/:userId", requireUser, async (req, res, next) => {
+usersRouter.get("/me", requireUser, async (req, res, next) => {
 
     try {
-        const user = await getUserById(req.params.userId);
 
-        if (user && user.id === req.user.id) {
-            res.send(user);
-        } else {
-            next(
-                post
-                    ? {
-                        name: "UnauthorizedUserError",
-                        message: "You cannot delete a user which is not yours",
-                    }
-                    : {
-                        name: "UserNotFoundError",
-                        message: "That user does not exist",
-                    }
-            )
+        if (req.user) {
+            res.send(req.user);
         }
-    } catch ({ name, message }) {
-        next({ name, message })
+
+    } catch (error) {
+        throw error
     }
 });
 
@@ -68,11 +56,15 @@ usersRouter.post('/register', async (req, res, next) => {
             } else {
                 const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1w' });
 
-                res.send({ user });
+                res.send({
+                    user,
+                    message: "You are now registered and logged in!",
+                    token
+                });
             }
         }
     } catch (error) {
-        next(error)
+        throw error
     }
 });
 
@@ -81,6 +73,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
     // request must have both
     if (!username || !password) {
+        res.status(401);
         next({
             name: "MissingCredentialsError",
             message: "Please supply both a username and password"
@@ -96,23 +89,24 @@ usersRouter.post("/login", async (req, res, next) => {
                     id: user.id,
                     username: username
                 },
-                process.env.JWT_SECRET
+                JWT_SECRET
             );
 
             // create token & return to user
             res.send({
-                message: "You're logged in!",
+                user,
+                message: "You are now logged in!",
                 token
             });
         } else {
+            res.status(401);
             next({
                 name: "IncorrectCredentialsError",
                 message: "Username or password is incorrect"
             });
         }
     } catch (error) {
-        console.log(error);
-        next(error);
+        throw error
     }
 });
 
