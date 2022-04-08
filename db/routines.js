@@ -78,6 +78,7 @@ const getPublicRoutinesByUser = async ({ username }) => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE users.username=$1 AND routines."isPublic"
         `, [username])
+        console.log("PUBLICROUTINE", rows)
         return attachActivitiesToRoutines(rows)
     } catch (error) {
         throw error

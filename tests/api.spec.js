@@ -67,7 +67,6 @@ describe('API', () => {
         } catch (err) {
           duplicateErrResp = err.response;
         }
-        console.log('API TEST:', duplicateSuccess)
         expect(duplicateSuccess).toBeFalsy();
         expect(duplicateErrResp.data).toBeTruthy();
       });
@@ -93,6 +92,7 @@ describe('API', () => {
         const { data } = await axios.get(`${API_URL}/api/users/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
+       
         expect(data.username).toBeTruthy();
         expect(data.username).toBe(registeredUser.username);
       });
@@ -118,7 +118,7 @@ describe('API', () => {
       });
     });
   });
-  describe('Activities', () => {
+  xdescribe('Activities', () => {
     let activityToCreateAndUpdate = { name: 'Bicep Curls', description: 'They hurt, but you will thank you later' };
     describe('GET /activities', () => {
       it('Just returns a list of all activities in the database', async () => {
@@ -160,7 +160,7 @@ describe('API', () => {
       });
     });
   });
-  describe('Routines', () => {
+  xdescribe('Routines', () => {
     let routineToCreateAndUpdate = { isPublic: true, name: 'Elliptical Day', goal: 'Work on that Elliptical!' };
     let routineToFail = { isPublic: false, name: 'Elliptical Day 2', goal: 'Work on that Elliptical... again!' };
     const newRoutineData = { isPublic: false, name: 'Elliptical Day Private', goal: 'Work on that Elliptical, yet again!' }
@@ -232,7 +232,7 @@ describe('API', () => {
       });
     });
   });
-  describe('routine_activities', () => {
+  xdescribe('routine_activities', () => {
     let newRoutineActivityData = { routineId: 3, activityId: 8, count: 25, duration: 200 };
     describe('PATCH /routine_activities/:routineActivityId (**)', () => {
       it('Updates the count or duration on the routine activity', async () => {

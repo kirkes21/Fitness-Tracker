@@ -92,6 +92,7 @@ async function attachActivitiesToRoutines(routines) {
         routine.activities = activitiesToAdd;
       }
       return routinesToReturn;
+      
     } catch (error) {
       throw error;
     }
