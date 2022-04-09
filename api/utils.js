@@ -1,5 +1,4 @@
 function requireUser(req, res, next) {
-    console.log("REQUIRE USER", req.user)
     if (!req.user) {
         res.status(401)
         next({

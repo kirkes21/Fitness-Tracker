@@ -1,30 +1,13 @@
 const express = require("express");
 const usersRouter = express.Router();
 const requireUser = require('./utils')
-const { createUser, getUserById, getUserByUsername, getAllRoutinesByUser, getPublicRoutinesByUser, getPublicRoutinesByActivity } = require('../db')
+const { createUser, getUserById, getUserByUsername, getAllRoutinesByUser, getPublicRoutinesByUser, getPublicRoutinesByActivity, getUser } = require('../db')
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
-
-usersRouter.use((req, res, next) => {
-    console.log("A request is being made to /users");
-
-    next()
-});
-
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-
     try {
-
-        if (!req.user.token) {
-            res.status(401);
-            next({
-                name: 'LoggedOutError',
-                message: 'You are not logged in.'
-            });
-        } else {
-            res.send(req.user);
-        }
+        res.send(req.user);
 
     } catch ({ name, message }) {
         next({ name, message })
@@ -77,7 +60,6 @@ usersRouter.post('/register', async (req, res, next) => {
 usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
 
-    // request must have both
     if (!username || !password) {
         res.status(401);
         next({
@@ -93,12 +75,11 @@ usersRouter.post("/login", async (req, res, next) => {
             const token = jwt.sign(
                 {
                     id: user.id,
-                    username: username
+                    username
                 },
                 JWT_SECRET
             );
 
-            // create token & return to user
             res.send({
                 user,
                 message: "You are now logged in!",

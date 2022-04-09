@@ -22,6 +22,7 @@ const getRoutinesWithoutActivities = async () => {
             SELECT *
             FROM routines
         `)
+
         return rows
     } catch (error) {
 
@@ -35,6 +36,7 @@ const getAllRoutines = async () => {
             FROM routines
             LEFT JOIN users ON "creatorId"=users.id
         `)
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
 
@@ -50,6 +52,7 @@ const getAllPublicRoutines = async () => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE "isPublic"
         `)
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
 
@@ -64,6 +67,7 @@ const getAllRoutinesByUser = async ({ username }) => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE users.username=$1
         `, [username])
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
         throw error
@@ -78,7 +82,7 @@ const getPublicRoutinesByUser = async ({ username }) => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE users.username=$1 AND routines."isPublic"
         `, [username])
-        console.log("PUBLICROUTINE", rows)
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
         throw error
@@ -148,9 +152,6 @@ const destroyRoutine = async (id) => {
         throw error
     }
 }
-
-
-
 
 
 

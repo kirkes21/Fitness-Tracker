@@ -51,7 +51,7 @@ describe('API', () => {
       it('Requires username and password. Requires all passwords to be at least 8 characters long.', () => {
         expect(newUser.password.length).toBeGreaterThan(7);
       });
-      it('EXTRA CREDIT: Hashes password before saving user to DB.', async () => {
+      xit('EXTRA CREDIT: Hashes password before saving user to DB.', async () => {
         const { rows: [queriedUser] } = await client.query(`
           SELECT *
           FROM users
@@ -92,7 +92,7 @@ describe('API', () => {
         const { data } = await axios.get(`${API_URL}/api/users/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-       
+
         expect(data.username).toBeTruthy();
         expect(data.username).toBe(registeredUser.username);
       });
@@ -118,7 +118,7 @@ describe('API', () => {
       });
     });
   });
-  xdescribe('Activities', () => {
+  describe('Activities', () => {
     let activityToCreateAndUpdate = { name: 'Bicep Curls', description: 'They hurt, but you will thank you later' };
     describe('GET /activities', () => {
       it('Just returns a list of all activities in the database', async () => {
