@@ -13,15 +13,21 @@ usersRouter.use((req, res, next) => {
 });
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-    console.log("/ME ROUTE users", req.user)
+
     try {
 
-        if (req.user) {
+        if (!req.user.token) {
+            res.status(401);
+            next({
+                name: 'LoggedOutError',
+                message: 'You are not logged in.'
+            });
+        } else {
             res.send(req.user);
         }
 
-    } catch (error) {
-        throw error
+    } catch ({ name, message }) {
+        next({ name, message })
     }
 });
 
@@ -63,8 +69,8 @@ usersRouter.post('/register', async (req, res, next) => {
                 });
             }
         }
-    } catch (error) {
-        throw error
+    } catch ({ next, message }) {
+        next({ next, message })
     }
 });
 
@@ -112,13 +118,10 @@ usersRouter.post("/login", async (req, res, next) => {
 
 usersRouter.get("/:username/routines", async (req, res, next) => {
     const username = req.params.username
-    console.log("USERNAME ROUTINES", username)
+
     try {
-
-        const  routines = await getPublicRoutinesByUser({username})
-
+        const routines = await getPublicRoutinesByUser({ username })
         res.send(routines)
-
     } catch (error) {
         throw error
     }
