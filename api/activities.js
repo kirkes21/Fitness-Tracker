@@ -1,5 +1,6 @@
 const express = require("express");
-const { getAllActivities, updateActivity, createActivity, getActivityById } = require("../db");
+const client = require("pg/lib/native/client");
+const { getAllActivities, updateActivity, createActivity, getActivityById, getPublicRoutinesByActivity } = require("../db");
 const requireUser = require('./utils')
 const activitiesRouter = express.Router();
 
@@ -47,6 +48,19 @@ activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
     } catch (error) {
         throw error
     }
+})
+
+activitiesRouter.get('/:activityId/routines', async (req, res, next) => {
+    const { activityId } = req.params
+
+    try {
+        const routines = await getPublicRoutinesByActivity({ id: activityId })
+
+        res.send(routines)
+    } catch (error) {
+        throw error
+    }
+
 })
 
 module.exports = activitiesRouter
