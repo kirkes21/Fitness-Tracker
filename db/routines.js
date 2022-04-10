@@ -45,7 +45,6 @@ const getAllRoutines = async () => {
 
 const getAllPublicRoutines = async () => {
     try {
-        console.log("ALLPUBLIC")
         const { rows } = await client.query(`
             SELECT routines.*, users.username as "creatorName"
             FROM routines
