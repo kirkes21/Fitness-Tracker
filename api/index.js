@@ -6,6 +6,7 @@ const apiRouter = express.Router();
 const usersRouter = require("./users");
 const healthRouter = require("./health");
 const activitiesRouter = require("./activities")
+const routinesRouter = require("./routines")
 
 const bodyParser = require("body-parser");
 
@@ -57,6 +58,7 @@ apiRouter.use((req, res, next) => {
 apiRouter.use("/health", healthRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/activities", activitiesRouter)
+apiRouter.use("/activities", routinesRouter)
 
 apiRouter.use((error, req, res, next) => {
     res.send({

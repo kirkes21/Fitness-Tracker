@@ -1,5 +1,4 @@
 const express = require("express");
-const client = require("pg/lib/native/client");
 const { getAllActivities, updateActivity, createActivity, getActivityById, getPublicRoutinesByActivity } = require("../db");
 const requireUser = require('./utils')
 const activitiesRouter = express.Router();
