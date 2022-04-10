@@ -36,10 +36,10 @@ activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
     if (name) {
         updateFields.name = name
     }
-
     if (description) {
         updateFields.description = description
     }
+
     try {
         const updatedActivity = await updateActivity(updateFields)
 

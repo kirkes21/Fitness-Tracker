@@ -211,7 +211,7 @@ describe('API', () => {
         expect(shouldBeDeleted).toBeFalsy();
       });
     });
-    describe('POST /routines/:routineId/activities', () => {
+    xdescribe('POST /routines/:routineId/activities', () => {
       let newRoutine
       it('Attaches a single activity to a routine.', async () => {
         newRoutine = await createRoutine({ creatorId: registeredUser.id, name: 'Pull Ups', goal: '10 pull ups' })
