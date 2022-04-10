@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllActivities, updateActivity, createActivity } = require("../db");
+const { getAllActivities, updateActivity, createActivity, getActivityById } = require("../db");
 const requireUser = require('./utils')
 const activitiesRouter = express.Router();
 
@@ -29,7 +29,9 @@ activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
     const { activityId } = req.params
     const { name, description } = req.body
 
-    const updateFields = {}
+    const updateFields = {
+        id: activityId
+    }
 
     if (name) {
         updateFields.name = name
@@ -38,9 +40,8 @@ activitiesRouter.patch('/:activityId', requireUser, async (req, res, next) => {
     if (description) {
         updateFields.description = description
     }
-
     try {
-        const updatedActivity = await updateActivity({ activityId, updateFields })
+        const updatedActivity = await updateActivity(updateFields)
 
         res.send(updatedActivity)
     } catch (error) {
