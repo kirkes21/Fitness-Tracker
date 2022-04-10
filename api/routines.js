@@ -17,7 +17,7 @@ routinesRouter.post('/', requireUser, async (req, res, next) => {
     const { isPublic, name, goal } = req.body
     const { id } = req.user
     const fields = {
-        id,
+        creatorId: id,
         isPublic,
         name,
         goal
