@@ -22,6 +22,7 @@ const getRoutinesWithoutActivities = async () => {
             SELECT *
             FROM routines
         `)
+
         return rows
     } catch (error) {
 
@@ -35,6 +36,7 @@ const getAllRoutines = async () => {
             FROM routines
             LEFT JOIN users ON "creatorId"=users.id
         `)
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
 
@@ -43,13 +45,13 @@ const getAllRoutines = async () => {
 
 const getAllPublicRoutines = async () => {
     try {
-        console.log("ALLPUBLIC")
         const { rows } = await client.query(`
             SELECT routines.*, users.username as "creatorName"
             FROM routines
             LEFT JOIN users ON "creatorId"=users.id
             WHERE "isPublic"
         `)
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
 
@@ -64,6 +66,7 @@ const getAllRoutinesByUser = async ({ username }) => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE users.username=$1
         `, [username])
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
         throw error
@@ -78,6 +81,7 @@ const getPublicRoutinesByUser = async ({ username }) => {
             LEFT JOIN users ON "creatorId"=users.id
             WHERE users.username=$1 AND routines."isPublic"
         `, [username])
+
         return attachActivitiesToRoutines(rows)
     } catch (error) {
         throw error
@@ -102,10 +106,10 @@ const getPublicRoutinesByActivity = async ({ id }) => {
 const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
     try {
         const { rows: [routine] } = await client.query(`
-       INSERT INTO routines("creatorId", "isPublic", name, goal)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (name) DO NOTHING
-       RETURNING *
+            INSERT INTO routines("creatorId", "isPublic", name, goal)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (name) DO NOTHING
+            RETURNING *
        `, [creatorId, isPublic, name, goal])
         return routine
     } catch (error) {
@@ -138,18 +142,17 @@ const destroyRoutine = async (id) => {
         DELETE FROM routine_activities
         WHERE "routineId"=$1
         `, [id])
-        await client.query(`
+        const { rows: [routine] } = await client.query(`
         DELETE FROM routines
         WHERE routines.id=$1
+        RETURNING *
         `, [id])
 
+        return routine
     } catch (error) {
         throw error
     }
 }
-
-
-
 
 
 

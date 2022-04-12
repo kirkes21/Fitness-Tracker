@@ -1,5 +1,19 @@
 const client = require("./client");
 
+const getRoutineActivityById = async (id) => {
+
+    try {
+        const { rows: [activity] } = await client.query(`
+            SELECT * FROM routine_activities
+            WHERE id=$1
+        `, [id])
+
+        return activity
+    } catch (error) {
+        throw error
+    }
+}
+
 const addActivityToRoutine = async ({ routineId, activityId, count, duration }) => {
 
     try {
@@ -31,10 +45,10 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
     try {
 
         const setString = Object.keys(fields)
-        .map((key, index) => `"${key}" =$${index + 1}`)
-        .join(", ");
-    
-        const { rows: [activity]} = await client.query(`
+            .map((key, index) => `"${key}" =$${index + 1}`)
+            .join(", ");
+
+        const { rows: [activity] } = await client.query(`
         UPDATE routine_activities
         SET ${setString}
         WHERE id=${id}
@@ -49,7 +63,7 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
 const destroyRoutineActivity = async (id) => {
     try {
         console.log(id)
-        const {rows: [activity]} = await client.query(`
+        const { rows: [activity] } = await client.query(`
         DELETE FROM routine_activities
         WHERE id=$1
         RETURNING *
@@ -61,6 +75,7 @@ const destroyRoutineActivity = async (id) => {
 }
 
 module.exports = {
+    getRoutineActivityById,
     addActivityToRoutine,
     getRoutineActivitiesByRoutine,
     updateRoutineActivity,
