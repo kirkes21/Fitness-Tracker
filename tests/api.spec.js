@@ -211,11 +211,14 @@ describe('API', () => {
         expect(shouldBeDeleted).toBeFalsy();
       });
     });
-    xdescribe('POST /routines/:routineId/activities', () => {
+    console.log("IN API POST ROUTINE", routineActivityToCreateAndUpdate)
+    describe('POST /routines/:routineId/activities', () => {
       let newRoutine
       it('Attaches a single activity to a routine.', async () => {
+        
         newRoutine = await createRoutine({ creatorId: registeredUser.id, name: 'Pull Ups', goal: '10 pull ups' })
         const { data: respondedRoutineActivity } = await axios.post(`${API_URL}/api/routines/${newRoutine.id}/activities`, { routineId: newRoutine.id, ...routineActivityToCreateAndUpdate }, { headers: { 'Authorization': `Bearer ${token}` } });
+        
         expect(respondedRoutineActivity.routineId).toBe(newRoutine.id);
         expect(respondedRoutineActivity.activityId).toBe(routineActivityToCreateAndUpdate.activityId);
         routineActivityToCreateAndUpdate = respondedRoutineActivity;
@@ -223,7 +226,9 @@ describe('API', () => {
       it('Prevents duplication on (routineId, activityId) pair.', async () => {
         let duplicateIds, duplicateIdsResp;
         try {
+          console.log("NEWROUTINE", newRoutine)
           duplicateIds = await axios.post(`${API_URL}/api/routines/${newRoutine.id}/activities`, routineActivityToCreateAndUpdate, { headers: { 'Authorization': `Bearer ${token}` } });
+          console.log(duplicateIds, "DUPLICATES")
         } catch (err) {
           duplicateIdsResp = err.response;
         }

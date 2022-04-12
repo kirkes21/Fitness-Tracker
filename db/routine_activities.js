@@ -28,13 +28,15 @@ const addActivityToRoutine = async ({ routineId, activityId, count, duration }) 
     }
 }
 
-const getRoutineActivitiesByRoutine = async ({ id }) => {
+const getRoutineActivitiesByRoutine = async ({ routineId }) => {
+    console.log("BEFORE QUERY", routineId)
     try {
+        
         const { rows } = await client.query(`
-        SELECT FROM routine_activities
+        SELECT * FROM routine_activities
         WHERE "routineId"=$1
-        `, [id])
-
+        `, [routineId])
+console.log("ROWS", rows)
         return rows
     } catch (error) {
         throw error
