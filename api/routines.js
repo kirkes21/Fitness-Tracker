@@ -53,8 +53,11 @@ routinesRouter.post(
         (routineActivity) => routineActivity.routineId === +routineId
       );
       if (filteredArray.length !== 0) {
-        res.status(401);
-        next({ name: "Duplicate", message: "This item already exists" });
+        //added "return"
+        return (
+        res.status(401),
+        next({ name: "Duplicate", message: "This item already exists" })
+        )
       }
       const attachedRoutine = await addActivityToRoutine({
         routineId,
