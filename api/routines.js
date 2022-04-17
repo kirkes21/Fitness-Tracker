@@ -6,7 +6,6 @@ const {
   getRoutineById,
   destroyRoutine,
   addActivityToRoutine,
-  getRoutineActivityById,
   getRoutineActivitiesByRoutine,
 } = require("../db");
 const requireUser = require("./utils");

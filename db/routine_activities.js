@@ -29,14 +29,14 @@ const addActivityToRoutine = async ({ routineId, activityId, count, duration }) 
 }
 
 const getRoutineActivitiesByRoutine = async ({ routineId }) => {
-    console.log("BEFORE QUERY", routineId)
+    
     try {
         
         const { rows } = await client.query(`
         SELECT * FROM routine_activities
         WHERE "routineId"=$1
         `, [routineId])
-console.log("ROWS", rows)
+
         return rows
     } catch (error) {
         throw error
@@ -64,7 +64,7 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
 
 const destroyRoutineActivity = async (id) => {
     try {
-        console.log(id)
+   
         const { rows: [activity] } = await client.query(`
         DELETE FROM routine_activities
         WHERE id=$1
