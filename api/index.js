@@ -7,6 +7,7 @@ const usersRouter = require("./users");
 const healthRouter = require("./health");
 const activitiesRouter = require("./activities")
 const routinesRouter = require("./routines")
+const routineActivitiesRouter = require("./routine_activities")
 
 const bodyParser = require("body-parser");
 
@@ -58,7 +59,9 @@ apiRouter.use((req, res, next) => {
 apiRouter.use("/health", healthRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/activities", activitiesRouter)
+apiRouter.use("/routine_activities", routineActivitiesRouter)
 apiRouter.use("/routines", routinesRouter)
+
 
 apiRouter.use((error, req, res, next) => {
     res.send({

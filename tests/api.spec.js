@@ -196,6 +196,8 @@ describe('API', () => {
     describe('PATCH /routines/:routineId (**)', () => {
       it('Updates a routine, notably changing public/private, the name, or the goal', async () => {
         const { data: respondedRoutine } = await axios.patch(`${API_URL}/api/routines/${routineToCreateAndUpdate.id}`, newRoutineData, { headers: { 'Authorization': `Bearer ${token}` } });
+        console.log(respondedRoutine)
+        console.log(newRoutineData)
         expect(respondedRoutine.name).toEqual(newRoutineData.name);
         expect(respondedRoutine.goal).toEqual(newRoutineData.goal);
         routineToCreateAndUpdate = respondedRoutine;
@@ -226,7 +228,6 @@ describe('API', () => {
       it('Prevents duplication on (routineId, activityId) pair.', async () => {
         let duplicateIds, duplicateIdsResp;
         try {
-          console.log("NEWROUTINE", newRoutine)
           duplicateIds = await axios.post(`${API_URL}/api/routines/${newRoutine.id}/activities`, routineActivityToCreateAndUpdate, { headers: { 'Authorization': `Bearer ${token}` } });
           console.log(duplicateIds, "DUPLICATES")
         } catch (err) {
