@@ -12,6 +12,8 @@ const {
 } = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
+const bcrypt = require('bcrypt')
+const SALT_ROUNDS = 10
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
   try {
@@ -48,10 +50,12 @@ usersRouter.post("/register", async (req, res, next) => {
         })
       );
     } else {
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
       const user = await createUser({
         username,
-        password,
-      });
+        password: hashedPassword,
+      })
+      delete user.password;
       if (!user) {
         next({
           name: "UserCreationError",
@@ -94,8 +98,8 @@ usersRouter.post("/login", async (req, res, next) => {
     const {
       rows: [user],
     } = await getUserByUsername(username);
-
-    if (user && user.password == password) {
+    const validPassword = await bcrypt.compare(password, user.password)
+    if (user && validPassword) {
       const token = jwt.sign(
         {
           id: user.id,
