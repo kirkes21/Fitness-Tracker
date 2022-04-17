@@ -51,7 +51,7 @@ describe('API', () => {
       it('Requires username and password. Requires all passwords to be at least 8 characters long.', () => {
         expect(newUser.password.length).toBeGreaterThan(7);
       });
-      xit('EXTRA CREDIT: Hashes password before saving user to DB.', async () => {
+      it('EXTRA CREDIT: Hashes password before saving user to DB.', async () => {
         const { rows: [queriedUser] } = await client.query(`
           SELECT *
           FROM users
